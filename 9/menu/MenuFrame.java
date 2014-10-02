@@ -6,7 +6,7 @@ import javax.swing.*;
 /**
  * A frame with a sample menu bar
  */
-public classs MenuFrame extends JFrame
+public class MenuFrame extends JFrame
 {
     private static final int DEFAULT_WIDTH = 300;
     private static final int DEFAULT_HEIGHT = 200;
@@ -40,7 +40,7 @@ public classs MenuFrame extends JFrame
 
         // demonstrate accelerators
         JMenuItem openItem = fileMenu.add(new TestAction("Open"));
-        openItem.setAccelerator(KeyStroke.getKeyStroke("ctrl 0"));
+        openItem.setAccelerator(KeyStroke.getKeyStroke("ctrl O"));
 
         fileMenu.addSeparator();
         saveAction = new TestAction("Save");
@@ -82,7 +82,58 @@ public classs MenuFrame extends JFrame
 
         //demonstrate icons
         Action cutAction =new TestAction("Cut");
-        cutAction.putValue(Action.SMALL_ICON, new ImageIcon("cut.gig"));
+        cutAction.putValue(Action.SMALL_ICON, new ImageIcon("cut.gif"));
         Action copyAction = new TestAction("Copy");
+        copyAction.putValue(Action.SMALL_ICON, new ImageIcon("copy.gif"));
+        Action pasteAction = new TestAction("paste");
+        pasteAction.putValue(Action.SMALL_ICON, new ImageIcon("paste.gif"));
+
+        JMenu editMenu = new JMenu("Edit");
+        editMenu.add(cutAction);
+        editMenu.add(copyAction);
+        editMenu.add(pasteAction);
+
+        // demonstrate nested menus
+        JMenu optionMenu = new JMenu("Options");
+
+        optionMenu.add(readonlyItem);
+        optionMenu.addSeparator();
+        optionMenu.add(insertItem);
+        optionMenu.add(overtypeItem);
+
+        editMenu.addSeparator();
+        editMenu.add(optionMenu);
+
+        //demonstrate mnemonics
+        JMenu helpMenu = new JMenu("Help");
+        helpMenu.setMnemonic('H');
+        JMenuItem indexItem = new JMenuItem("Index");
+        helpMenu.add(indexItem);
+
+        // you can also add the mnemonic key to an action
+        Action aboutAction = new TestAction("About");
+        aboutAction.putValue(Action.MNEMONIC_KEY, new Integer('A'));
+        helpMenu.add(aboutAction);
+
+        //add all top-level menus to menu bar
+        JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+
+        menuBar.add(fileMenu);
+        menuBar.add(editMenu);
+        menuBar.add(helpMenu);
+
+        //demonstrate pop-ups
+        popup = new JPopupMenu();
+        popup.add(cutAction);
+        popup.add(copyAction);
+        popup.add(pasteAction);
+
+        JPanel panel = new JPanel();
+        panel.setComponentPopupMenu(popup);
+        add(panel);
+
+        //the following line is a workaround for buy 4966109
+        panel.addMouseListener(new MouseAdapter() {});
     }
 }
